@@ -1,4 +1,4 @@
-__all__ = ["check_float", "check", "check_near", "check_not_empty"]
+__all__ = ["check_float", "check", "check_near", "check_not_empty", "check_take_image"]
 
 from typing import Any
 
@@ -58,3 +58,10 @@ def check_not_empty(keyword: str, values: dict) -> None:
         print(f"{keyword} is empty")
     else:
         print(f"{keyword} OK")
+
+def check_take_image(keyword: str, values: dict, truth: dict, truth_key: str) -> None:
+    try:
+        truth_value = truth[truth_key]
+        check(keyword, values, truth_value)
+    except KeyError:
+        check(keyword, values, None)
