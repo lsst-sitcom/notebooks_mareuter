@@ -16,8 +16,10 @@ def has_key(function):
 
 
 @has_key
-def check(keyword: str, values: dict, truth: Any) -> None:
+def check(keyword: str, values: dict, truth: Any, index: int = None) -> None:
     value = values[keyword]
+    if index is not None:
+        truth = truth.split(":")[index]
     if truth == value:
         print(f"{keyword} OK")
     else:
