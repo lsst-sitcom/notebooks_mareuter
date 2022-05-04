@@ -61,6 +61,7 @@ def check_not_empty(keyword: str, values: dict) -> None:
     else:
         print(f"{keyword} OK")
 
+
 def check_take_image(keyword: str, values: dict, truth: dict, truth_key: str) -> None:
     try:
         truth_value = truth[truth_key]
