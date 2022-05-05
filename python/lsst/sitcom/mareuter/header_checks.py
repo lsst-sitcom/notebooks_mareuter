@@ -38,7 +38,7 @@ def check_float(
         else:
             print(f"Problem with {keyword}: {truth} != {value}")
     except TypeError:
-        print(f"Problem with {keyword}: {truth} != {value}                      ")
+        print(f"Problem with {keyword}: {truth} != {value}")
 
 
 def check_near(
