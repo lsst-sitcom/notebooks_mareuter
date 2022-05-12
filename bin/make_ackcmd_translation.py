@@ -24,7 +24,6 @@ def main(opts):
     xml_sal_version = None
     topic_mapping = {}
     for i, idl_file in enumerate(idl_location.iterdir()):
-        #print(str(idl_file))
         pragma_defs = []
         csc = None
         with idl_file.open() as ifile:
@@ -50,6 +49,7 @@ def main(opts):
 
     output_file = opts.save_path / f"ackcmd_translation_{xml_sal_version}.json"
     json.dump(topic_mapping, output_file.open("w"), sort_keys=True, indent=2)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
