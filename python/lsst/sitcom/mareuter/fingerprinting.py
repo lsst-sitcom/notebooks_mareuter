@@ -6,7 +6,10 @@ import fastparquet
 import numpy as np
 import pandas as pd
 
+from .playlist_info.playlist import Playlist
+
 __all__ = [
+    "create_fingerprints",
     "find_fingerprint",
     "make_auxtel_image_dataframe",
     "make_comcam_image_dataframe",
@@ -24,6 +27,19 @@ async def calculate_statistics(dataId: dict, butler):
     except KeyError:
         amp_medians.insert(0, dataId["detector"])
     return amp_medians
+
+
+async def create_fingerprints(camera: str, playlist: Playlist, butler) -> None:
+    output_dir = pathlib.Path(f"~/DATA/playlist_images/{camera}").expanduser()
+    if not output_dir.exists():
+        output_dir.mkdir(parents=True)
+    for seq_num in playlist.seq_nums:
+        data = await globals()[f"make_{camera}_image_dataframe"](
+            playlist.day_obs, seq_num, butler
+        )
+        fastparquet.write(
+            output_dir / f"median_{playlist.day_obs}{seq_num:05}.parq", data
+        )
 
 
 async def find_fingerprint(
