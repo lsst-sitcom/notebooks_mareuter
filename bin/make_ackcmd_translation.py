@@ -24,9 +24,9 @@ def main(opts):
     xml_sal_version = None
     topic_mapping = {}
     for i, idl_file in enumerate(idl_location.iterdir()):
-        pragma_defs = []
-        csc = None
         with idl_file.open() as ifile:
+            pragma_defs = []
+            csc = None
             for line in ifile:
                 if line.startswith("//") and i == 0:
                     idl_versions = []
@@ -38,14 +38,14 @@ def main(opts):
                 if line.startswith("module"):
                     csc = line.split()[1]
                     topic_mapping[csc] = {}
-                if line.startswith("#pragma"):
-                    value = line.split()[-1]
+                if line.startswith("struct"):
+                    value = line.split()[1]
                     # Strip hash from topic
                     topic = "_".join(value.split("_")[:-1])
                     if "ackcmd" not in topic:
                         pragma_defs.append(topic)
-        for j, t in enumerate(pragma_defs):
-            topic_mapping[csc][j + 1] = t
+            for j, t in enumerate(pragma_defs):
+                topic_mapping[csc][j + 1] = t
 
     output_file = opts.save_path / f"ackcmd_translation_{xml_sal_version}.json"
     json.dump(topic_mapping, output_file.open("w"), sort_keys=True, indent=2)
