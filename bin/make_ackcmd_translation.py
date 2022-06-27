@@ -20,10 +20,11 @@ def main(opts):
 
     version_number = ".".join([str(x) for x in sys.version_info[:2]])
     python_version = f"python{version_number}"
-    idl_location = pathlib.Path(top_dir) / "lib" / python_version / "idl"
+    idl_package_data = pathlib.Path("lsst", "ts", "idl", "data", "idl")
+    idl_location = pathlib.Path(top_dir) / "lib" / python_version / "site-packages" / idl_package_data
     xml_sal_version = None
     topic_mapping = {}
-    for i, idl_file in enumerate(idl_location.iterdir()):
+    for i, idl_file in enumerate(idl_location.glob("*.idl")):
         with idl_file.open() as ifile:
             pragma_defs = []
             csc = None
