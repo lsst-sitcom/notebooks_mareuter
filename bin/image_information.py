@@ -2,14 +2,14 @@
 import argparse
 import operator
 
-from prettytable import PrettyTable, DOUBLE_BORDER
+from prettytable import DOUBLE_BORDER, PrettyTable
 
 import lsst.daf.butler as dafButler
 
 HEADER = ["SeqNum", "ObsType", "ExpTime", "DarkTime", "Filter", "Target"]
 
 
-def main(opts):
+def main(opts: argparse.Namespace) -> None:
     butler = dafButler.Butler(
         opts.instrument,
         collections=[f"{opts.instrument}/raw/all"],

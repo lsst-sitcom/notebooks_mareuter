@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import pathlib
+import typing
 
 import fastparquet
 import numpy as np
@@ -16,7 +17,7 @@ __all__ = [
 ]
 
 
-async def calculate_statistics(dataId: dict, butler):
+async def calculate_statistics(dataId: dict, butler: typing.Any) -> typing.List[float]:
     raw = butler.get("raw", dataId)
     amps = raw.getDetector()
     amp_medians = [
@@ -29,7 +30,9 @@ async def calculate_statistics(dataId: dict, butler):
     return amp_medians
 
 
-async def create_fingerprints(camera: str, playlist: Playlist, butler) -> None:
+async def create_fingerprints(
+    camera: str, playlist: Playlist, butler: typing.Any
+) -> None:
     output_dir = pathlib.Path(f"~/DATA/playlist_images/{camera}").expanduser()
     if not output_dir.exists():
         output_dir.mkdir(parents=True)
@@ -47,7 +50,7 @@ async def find_fingerprint(
     start_seq_num: int,
     end_seq_num: int,
     camera: str,
-    butler,
+    butler: typing.Any,
 ) -> None:
     for seq_num in range(start_seq_num, end_seq_num + 1):
         medians = await globals()[f"make_{camera}_image_dataframe"](
@@ -67,7 +70,9 @@ async def find_fingerprint(
             print(f"Image {seq_num} not found.")
 
 
-async def make_auxtel_image_dataframe(day_obs: int, seq_num: int, butler):
+async def make_auxtel_image_dataframe(
+    day_obs: int, seq_num: int, butler: typing.Any
+) -> typing.Any:
     dataId = {
         "instrument": "LATISS",
         "detector": 0,
@@ -78,7 +83,9 @@ async def make_auxtel_image_dataframe(day_obs: int, seq_num: int, butler):
     return make_dataframe(ccd_medians)
 
 
-async def make_comcam_image_dataframe(day_obs: int, seq_num: int, butler):
+async def make_comcam_image_dataframe(
+    day_obs: int, seq_num: int, butler: typing.Any
+) -> typing.Any:
     dataId_temp = {
         "instrument": "LSSTComCam",
         "detector.raft": "R22",
@@ -97,7 +104,7 @@ async def make_comcam_image_dataframe(day_obs: int, seq_num: int, butler):
     return make_dataframe(ccd_medians)
 
 
-def make_dataframe(data: list):
+def make_dataframe(data: list) -> typing.Any:
     columns = [f"Amp{i:02}" for i in range(16)]
     columns.insert(0, "DetId")
     return pd.DataFrame(data, columns=columns, dtype="float64")

@@ -3,14 +3,13 @@ import unittest
 
 from lsst.sitcom.mareuter.playlist_info.playlist import Playlist
 
-
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
 
 
 class TestHeaderUtils(unittest.TestCase):
-    def test_playlist_class(self):
+    def test_playlist_class(self) -> None:
         day_obs = 20220511
         seq_nums = list(range(34, 36 + 1))
         file_stem = "AT_O_{0}_{1:06}"

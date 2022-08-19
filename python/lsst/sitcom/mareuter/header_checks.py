@@ -1,12 +1,12 @@
 __all__ = ["check_float", "check", "check_near", "check_not_empty", "check_take_image"]
 
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 
 
-def has_key(function):
-    def wrapper(*args, **kwargs):
+def has_key(function: Callable[..., None]) -> Callable:
+    def wrapper(*args: Any, **kwargs: Any) -> None:
         try:
             return function(*args, **kwargs)
         except KeyError:

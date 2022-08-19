@@ -1,8 +1,9 @@
 import logging
 import unittest
 
-import lsst.sitcom.mareuter.header_utils as hu
 import pandas as pd
+
+import lsst.sitcom.mareuter.header_utils as hu
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -10,7 +11,7 @@ logger.level = logging.DEBUG
 
 
 class TestHeaderUtils(unittest.TestCase):
-    def test_dict_from_additional(self):
+    def test_dict_from_additional(self) -> None:
         truth = {
             "imageType": "DARK",
             "groupId": "2022-04-25T21:51:16.540",
@@ -32,7 +33,7 @@ class TestHeaderUtils(unittest.TestCase):
 
         self.assertDictEqual(hu.dict_from_additional(df), truth)
 
-    def test_get_value(self):
+    def test_get_value(self) -> None:
         empty_df = pd.DataFrame()
         self.assertIsNone(hu.get_value(empty_df, "mode"))
 

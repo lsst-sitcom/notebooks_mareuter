@@ -1,3 +1,10 @@
+[project]
+name = "notebooks_mareuter"
+version = "1.0.0"
+
+[tool.setuptools.packages.find]
+where = [ "python" ]
+
 [tool.isort]
 profile = "black"
 skip = ["__init__.py"]
@@ -10,4 +17,4 @@ ignore_missing_imports = "True"
 # The following only excludes version.py when running mypy from the command line.
 # `--ignore-glob=*/version.py` in `[tool:pytest]` excludes the file from pytest,
 # because pytest explicitly specifies each file being tested, and that overrides mypy's exclude.
-exclude = "version.py"
+exclude = ["version.py", "bin/make_ackcmd_translation.py"]
