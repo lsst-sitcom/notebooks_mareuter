@@ -24,4 +24,4 @@ def get_efd() -> str:
             return "base_efd"
         raise RuntimeError(f"Cannot provide EFD name for {label}.")
     except KeyError:
-        return "ldf_stable_efd"
+        return "usdf_efd"
