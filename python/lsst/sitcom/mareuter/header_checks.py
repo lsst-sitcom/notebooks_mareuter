@@ -1,6 +1,6 @@
 __all__ = ["check_float", "check", "check_near", "check_not_empty", "check_take_image"]
 
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
 import numpy as np
 
@@ -16,7 +16,9 @@ def has_key(function: Callable[..., None]) -> Callable:
 
 
 @has_key
-def check(keyword: str, values: dict, truth: Any, index: int = None) -> None:
+def check(
+    keyword: str, values: dict, truth: Any, index: Union[int, None] = None
+) -> None:
     value = values[keyword]
     if index is not None:
         truth = truth.split(":")[index]
