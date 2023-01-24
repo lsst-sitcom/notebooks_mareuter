@@ -3,7 +3,7 @@ from .playlist import Playlist
 __all__ = ["TTS_PLAYLISTS"]
 
 TTS_PLAYLISTS = {
-    "default": Playlist("CC", 20200221, [10, 20, 124, 163], "O", "emu"),
+    "default": Playlist("CC", 20200221, [10, 20, 124, 163], "C", "emu"),
     "bias": Playlist("CC", 20211123, list(range(1, 10 + 1)), "O", "emu"),
     "dark": Playlist("CC", 20211123, list(range(11, 20 + 1)), "O", "emu"),
     "flat": Playlist("CC", 20211123, list(range(21, 30 + 1)), "O", "emu"),
