@@ -14,7 +14,7 @@ ENV_VAR = "LSST_DDS_PARTITION_PREFIX"
 class TestSiteEfd(unittest.TestCase):
     def test_get_efd(self) -> None:
         efd_name = get_efd()
-        self.assertEqual(efd_name, "ldf_stable_efd")
+        self.assertEqual(efd_name, "usdf_efd")
 
         os.environ[ENV_VAR] = "summit"
         efd_name = get_efd()
