@@ -1,6 +1,16 @@
 [project]
 name = "notebooks_mareuter"
 version = "1.0.0"
+dependencies = [
+    "pandas",
+    "prettytable"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "pytest"
+]
 
 [tool.setuptools.packages.find]
 where = [ "python" ]
