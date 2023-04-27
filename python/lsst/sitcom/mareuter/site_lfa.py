@@ -35,4 +35,4 @@ def get_lfa() -> LfaInfo:
             return lfa
         raise RuntimeError(f"Cannot provide EFD name for {label}.")
     except KeyError:
-        raise RuntimeError(f"LSST_DDS_PARTITION_PREFIX not defined at {label}")
+        raise RuntimeError("LSST_DDS_PARTITION_PREFIX not defined")
