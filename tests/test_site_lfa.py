@@ -38,3 +38,4 @@ class TestSiteLfa(unittest.TestCase):
         del os.environ[ENV_VAR]
         with self.assertRaises(RuntimeError):
             get_lfa()
+
