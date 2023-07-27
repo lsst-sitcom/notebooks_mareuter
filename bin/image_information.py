@@ -6,12 +6,17 @@ from prettytable import DOUBLE_BORDER, PrettyTable
 
 import lsst.daf.butler as dafButler
 
-HEADER = ["SeqNum", "ObsType", "ExpTime", "DarkTime", "Filter", "Target"]
+HEADER = ["ObsId", "SeqNum", "ObsType", "ExpTime", "DarkTime", "Filter", "Target"]
 
 
 def main(opts: argparse.Namespace) -> None:
+    if opts.embargo:
+        repo = "/repo/embargo"
+    else:
+        repo = opts.instrument
+
     butler = dafButler.Butler(
-        opts.instrument,
+        repo,
         collections=[f"{opts.instrument}/raw/all"],
         instrument=opts.instrument,
     )
@@ -39,6 +44,7 @@ def main(opts: argparse.Namespace) -> None:
     for record in records:
         table.add_row(
             [
+                record.obs_id,
                 record.seq_num,
                 record.observation_type,
                 record.exposure_time,
@@ -63,6 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("seq_end")
 
     parser.add_argument("--show-first-record", action="store_true")
+    parser.add_argument("-e", "--embargo", action="store_true")
 
     args = parser.parse_args()
     main(args)

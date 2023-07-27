@@ -1,6 +1,8 @@
+import copy
+
 from .playlist import Playlist
 
-__all__ = ["TTS_PLAYLISTS"]
+__all__ = ["BTS_PLAYLISTS", "TTS_PLAYLISTS"]
 
 TTS_PLAYLISTS = {
     "default": Playlist("AT", 20210218, list(range(249, 263 + 1)), "O", "emu"),
@@ -14,3 +16,5 @@ TTS_PLAYLISTS = {
     "verify": Playlist("AT", 20210217, list(range(325, 329 + 1)), "O", "emu"),
     "test": Playlist("AT", 20200315, list(range(120, 122 + 1)), "O", "emu"),
 }
+
+BTS_PLAYLISTS = copy.deepcopy(TTS_PLAYLISTS)
