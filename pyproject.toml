@@ -5,7 +5,8 @@ dependencies = [
     "awscli",
     "fastparquet",
     "pandas",
-    "prettytable"
+    "prettytable",
+    "tables"
 ]
 
 [project.optional-dependencies]
