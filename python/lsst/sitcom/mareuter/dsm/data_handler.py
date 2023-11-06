@@ -7,22 +7,24 @@ import numpy as np
 import pandas as pd
 import tables as tb
 
-from .constants import DATETIME_FORMAT
+__all__ = ["DataHandler", "DATETIME_FORMAT", "REPORT_TIME_FORMAT"]
 
-__all__ = ["DataHandler"]
+
+DATETIME_FORMAT = "%Y%m%d_%H%M%S"
+REPORT_TIME_FORMAT = "%F %T"
 
 
 class DataHandler:
-    def __init__(
-        self, data_path: pathlib.Path, date_str: str, pixel_scale: float
-    ) -> None:
-        self.centroid_filename = data_path / f"smm_centroid_{date_str}.h5"
-        self.psd_filename = data_path / f"smm_psd_{date_str}.h5"
+    def __init__(self, data_path: str, date_str: str, pixel_scale: float) -> None:
+        self.data_path = pathlib.Path(data_path).expanduser()
+        self.centroid_filename = self.data_path / f"smm_centroid_{date_str}.h5"
+        self.psd_filename = self.data_path / f"smm_psd_{date_str}.h5"
+        self.date_string = date_str
         self.pixel_scale = pixel_scale
-        self.general_info = None
-        self.camera_info = None
+        self.general_info: tb.table.Table = None
+        self.camera_info: tb.table.Table = None
         self.num_groups: int | None = None
-        self.duration: float | None = None
+        self.duration: np.timedelta64 = None
         self.psd_x: np.array | None = None
         self.psd_y: np.array | None = None
         self.timestamps: np.array = None
@@ -84,6 +86,8 @@ class DataHandler:
         sx_data = []
         sy_data = []
         for i, key in enumerate(keys):
+            if not key.startswith("DT_"):
+                continue
             pd_h5 = pd.read_hdf(self.centroid_filename, key=key)
             x = pd_h5.X.values
             y = pd_h5.Y.values
@@ -95,7 +99,7 @@ class DataHandler:
 
         data = {
             "centroidX": cx_data,
-            "centroidY": cx_data,
+            "centroidY": cy_data,
             "rmsX": sx_data,
             "rmsY": sy_data,
             "flux": zero_array,
@@ -124,3 +128,30 @@ class DataHandler:
         self.pd_weather = await client.select_time_series(
             weather_query, "*", start.tai, end.tai, weather_index
         )
+
+    def report_time(self) -> str:
+        return datetime.strptime(self.date_string, DATETIME_FORMAT).strftime(
+            REPORT_TIME_FORMAT
+        )
+
+    def print_general_information(self) -> None:
+        try:
+            for name, value in zip(self.general_info.colnames, self.general_info[0]):
+                print(f"{name}: {value.decode()}")
+        except AttributeError:
+            print("No information available!")
+
+    def print_camera_information(self) -> None:
+        try:
+            for name, value in zip(self.camera_info.colnames, self.camera_info[0]):
+                try:
+                    v = value.decode()
+                except AttributeError:
+                    v = value
+                print(f"{name}: {v}")
+        except AttributeError:
+            print("No information available!")
+
+    def print_extra_information(self) -> None:
+        print(f"Number of data groups: {self.num_groups}")
+        print(f"Data Duration (H:M:S): {self.duration.item()}")
