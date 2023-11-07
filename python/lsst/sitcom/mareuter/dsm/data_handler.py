@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import pathlib
 
 from astropy.time import Time
@@ -12,6 +13,7 @@ __all__ = ["DataHandler", "DATETIME_FORMAT", "REPORT_TIME_FORMAT"]
 
 DATETIME_FORMAT = "%Y%m%d_%H%M%S"
 REPORT_TIME_FORMAT = "%F %T"
+MARKDOWN_SEPARATOR = f"  {os.linesep}"
 
 
 class DataHandler:
@@ -134,24 +136,30 @@ class DataHandler:
             REPORT_TIME_FORMAT
         )
 
-    def print_general_information(self) -> None:
+    def general_information(self) -> str:
+        lines = []
         try:
             for name, value in zip(self.general_info.colnames, self.general_info[0]):
-                print(f"{name}: {value.decode()}")
+                lines.append(f"{name}: {value.decode()}")
         except AttributeError:
-            print("No information available!")
+            lines.append("No information available!")
+        return MARKDOWN_SEPARATOR.join(lines)
 
-    def print_camera_information(self) -> None:
+    def camera_information(self) -> str:
+        lines = []
         try:
             for name, value in zip(self.camera_info.colnames, self.camera_info[0]):
                 try:
                     v = value.decode()
                 except AttributeError:
                     v = value
-                print(f"{name}: {v}")
+                lines.append(f"{name}: {v}")
         except AttributeError:
-            print("No information available!")
+            lines.append("No information available!")
+        return MARKDOWN_SEPARATOR.join(lines)
 
-    def print_extra_information(self) -> None:
-        print(f"Number of data groups: {self.num_groups}")
-        print(f"Data Duration (H:M:S): {self.duration.item()}")
+    def extra_information(self) -> str:
+        lines = []
+        lines.append(f"Number of data groups: {self.num_groups}")
+        lines.append(f"Data Duration (H:M:S): {self.duration.item()}")
+        return MARKDOWN_SEPARATOR.join(lines)
