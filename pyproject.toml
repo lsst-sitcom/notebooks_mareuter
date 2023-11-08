@@ -4,8 +4,11 @@ version = "1.0.0"
 dependencies = [
     "awscli",
     "fastparquet",
+    "jupyter",
     "pandas",
-    "prettytable"
+    "papermill",
+    "prettytable",
+    "tables"
 ]
 
 [project.optional-dependencies]
