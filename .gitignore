@@ -130,3 +130,6 @@ dmypy.json
 
 reports
 DSM_Report*.ipynb
+
+.DS_Store
+

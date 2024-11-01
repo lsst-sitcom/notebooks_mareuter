@@ -27,7 +27,7 @@ def get_from_json(column: str, info: dict) -> Any:
 
 def get_value(result: pd.DataFrame, column: str, index: int = 0) -> Any:
     try:
-        value = result[column][index]
+        value = result[column].iloc(index)
         return value
     except KeyError:
         print(f"{column} not found in dataframe!")
