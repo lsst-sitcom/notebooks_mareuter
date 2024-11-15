@@ -2,7 +2,7 @@
 import argparse
 import operator
 
-from prettytable import DOUBLE_BORDER, PrettyTable
+from prettytable import PrettyTable, TableStyle
 
 import lsst.daf.butler as dafButler
 
@@ -56,7 +56,7 @@ def main(opts: argparse.Namespace) -> None:
 
     table.align = "l"
     table.float_format["DarkTime"] = ".6"
-    table.set_style(DOUBLE_BORDER)
+    table.set_style(TableStyle.DOUBLE_BORDER)
     print(table)
 
 
