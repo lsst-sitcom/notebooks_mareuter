@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import argparse
 
-from prettytable import DOUBLE_BORDER, PrettyTable
+from prettytable import PrettyTable, TableStyle
 
 import lsst.sitcom.mareuter.aws_du_helpers as adh
 from lsst.sitcom.mareuter.process_helpers import run_cmd
+from lsst.sitcom.mareuter.site_butler import get_butler
 from lsst.sitcom.mareuter.site_lfa import get_lfa
 
 SIZE_BYTES_HEADER = ["Key", "Bytes Size"]
@@ -12,17 +13,20 @@ NUM_OBJECTS_HEADER = ["Key", "Number of Objects"]
 
 
 def main(opts: argparse.Namespace) -> None:
-    lfa = get_lfa()
+    if opts.butler is not None:
+        info = get_butler(opts.butler)
+    else:
+        info = get_lfa()
 
     # Get all of the keys from the S3 bucket
     cmd = [
         "aws",
         "--profile",
-        f"{lfa.profile}",
-        f"--endpoint-url={lfa.endpoint_url}",
+        f"{info.profile}",
+        f"--endpoint-url={info.endpoint_url}",
         "s3",
         "ls",
-        f"{lfa.bucket}/",
+        f"{info.bucket}/",
     ]
 
     key_lines = run_cmd(cmd, as_lines=True)
@@ -42,7 +46,7 @@ def main(opts: argparse.Namespace) -> None:
 
     du_info = []
     for key in keys:
-        cmd[6] = f"{lfa.bucket}/{key}"
+        cmd[6] = f"{info.bucket}/{key}"
         output = run_cmd(cmd, as_lines=True)
         name = key.strip("/")
         num_objects = int(output[-3].strip().split()[-1])
@@ -62,7 +66,7 @@ def main(opts: argparse.Namespace) -> None:
     for record in sorted_size_bytes:
         table_size_bytes.add_row([record.key, adh.get_human_size(record.size_bytes)])
     table_size_bytes.align = "l"
-    table_size_bytes.set_style(DOUBLE_BORDER)
+    table_size_bytes.set_style(TableStyle.DOUBLE_BORDER)
     print(table_size_bytes)
     print(
         f"Total Size Bytes: {adh.get_human_size(adh.sum_attribute(sorted_size_bytes, 'size_bytes'))}"
@@ -76,7 +80,7 @@ def main(opts: argparse.Namespace) -> None:
     for record in sorted_num_objects:
         table_num_objects.add_row([record.key, record.num_objects])
     table_num_objects.align = "l"
-    table_num_objects.set_style(DOUBLE_BORDER)
+    table_num_objects.set_style(TableStyle.DOUBLE_BORDER)
     print(table_num_objects)
     print(
         f"Total Number of Objects: {adh.sum_attribute(sorted_num_objects, 'num_objects')}"
@@ -85,6 +89,13 @@ def main(opts: argparse.Namespace) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "-b",
+        "--butler",
+        type=str,
+        help="Look at a particular butler bucket instead of the LFA.",
+    )
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Increase script verbosity."
