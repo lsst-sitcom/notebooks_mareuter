@@ -32,7 +32,7 @@ def get_butler(butler_type: str) -> ButlerInfo:
         if label == "summit":
             endpoint_url = "https://s3-butler.cp.lsst.org"
         if endpoint_url is not None:
-            return ButlerInfo(endpoint_url, f"rubinobs-{butler_type}", "butler")
+            return ButlerInfo(endpoint_url, f"s3://rubinobs-{butler_type}", "butler")
         raise RuntimeError(f"Cannot provide Butler info for {label}.")
     except KeyError:
         raise RuntimeError("LSST_SITE not defined")
