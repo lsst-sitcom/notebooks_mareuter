@@ -54,7 +54,7 @@ def main(opts: argparse.Namespace) -> None:
     for data_record in data_records:
         exposures[data_record.dataId["exposure"]].append(data_record.dataId["detector"])
 
-    base_url = f"{lfa_info.endpoint_url}/{lfa_info.bucket}/MTCamera/expectedSensors/{opts.day_obs}/"
+    base_url = f"{lfa_info.endpoint_url}/{lfa_info.bucket}/MTCamera/expectedSensors/{opts.day_obs}"
 
     detector_lists = {}
     for dim_record in dim_records:
