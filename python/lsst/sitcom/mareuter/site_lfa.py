@@ -10,7 +10,7 @@ class LfaInfo:
 
 
 def get_lfa() -> LfaInfo:
-    """Get the LFA information from the LSST_DDS_PARTITION_PREFIX envvar
+    """Get the LFA information from the LSST_SITE envvar
 
     Returns
     -------
@@ -20,10 +20,10 @@ def get_lfa() -> LfaInfo:
     Raises
     ------
     RuntimeError
-        If the value of LSST_DDS_PARTITION_PREFIX is not recognized
+        If the value of LSST_SITE is not recognized
     """
     try:
-        label = os.environ["LSST_DDS_PARTITION_PREFIX"]
+        label = os.environ["LSST_SITE"]
         lfa = None
         if label == "tucson":
             lfa = LfaInfo("https://s3.tu.lsst.org", "rubinobs-lfa-tuc", "tts")
@@ -35,4 +35,4 @@ def get_lfa() -> LfaInfo:
             return lfa
         raise RuntimeError(f"Cannot provide EFD name for {label}.")
     except KeyError:
-        raise RuntimeError("LSST_DDS_PARTITION_PREFIX not defined")
+        raise RuntimeError("LSST_SITE not defined")
