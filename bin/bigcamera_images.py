@@ -6,7 +6,7 @@ import operator
 from prettytable import PrettyTable, TableStyle
 import requests
 
-import lsst.daf.butler as dafButler
+from lsst.daf.butler import Butler
 from lsst.sitcom.mareuter.process_helpers import run_cmd
 from lsst.sitcom.mareuter.site_butler import get_butler
 from lsst.sitcom.mareuter.site_lfa import get_lfa
@@ -24,7 +24,7 @@ def main(opts: argparse.Namespace) -> None:
     else:
         repo = instrument
 
-    butler = dafButler.Butler(
+    butler = Butler(
         repo,
         collections=[f"{instrument}/raw/all"],
         instrument=instrument,
@@ -54,7 +54,7 @@ def main(opts: argparse.Namespace) -> None:
     for data_record in data_records:
         exposures[data_record.dataId["exposure"]].append(data_record.dataId["detector"])
 
-    base_url = f"{lfa_info.endpoint_url}/{lfa_info.bucket}/MTCamera/{opts.day_obs}/"
+    base_url = f"{lfa_info.endpoint_url}/{lfa_info.bucket}/MTCamera/expectedSensors/{opts.day_obs}/"
 
     detector_lists = {}
     for dim_record in dim_records:
@@ -65,7 +65,7 @@ def main(opts: argparse.Namespace) -> None:
             "sensors": list(det_info.keys()),
             "images": [],
             "diff": None,
-            "exposure": dim_record.exposure,
+            "exposure": dim_record.id,
         }
 
         cmd = [
@@ -80,7 +80,7 @@ def main(opts: argparse.Namespace) -> None:
 
         files_listing = run_cmd(cmd, as_lines=True)
         for file_listing in files_listing[:-1]:
-            rfile = files_listing.strip().split()[-1]
+            rfile = file_listing.strip().split()[-1]
             if rfile.endswith("fits"):
                 detector_lists[dim_record.obs_id]["images"].append(rfile)
 
