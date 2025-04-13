@@ -8,7 +8,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
 
-ENV_VAR = "LSST_DDS_PARTITION_PREFIX"
+ENV_VAR = "LSST_SITE"
 
 
 class TestSiteEfd(unittest.TestCase):
