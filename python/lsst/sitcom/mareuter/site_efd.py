@@ -2,7 +2,7 @@ import os
 
 
 def get_efd() -> str:
-    """Get the EFD name from the LSST_DDS_PARTITION_PREFIX envvar
+    """Get the EFD name from the LSST_SITE envvar
 
     Returns
     -------
@@ -12,10 +12,10 @@ def get_efd() -> str:
     Raises
     ------
     RuntimeError
-        If the value of LSST_DDS_PARTITION_PREFIX is not recognized
+        If the value of LSST_SITE is not recognized
     """
     try:
-        label = os.environ["LSST_DDS_PARTITION_PREFIX"]
+        label = os.environ["LSST_SITE"]
         if label == "summit":
             return "summit_efd"
         if label == "tucson":

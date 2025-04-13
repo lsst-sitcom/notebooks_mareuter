@@ -7,8 +7,8 @@ import pandas as pd
 
 
 def dict_from_additional(data: pd.DataFrame) -> dict:
-    additional_keys = data["additionalKeys"][0].split(":")
-    additional_values = re.split(r"(?<!\\):", data["additionalValues"][0])
+    additional_keys = data["additionalKeys"].iloc[0].split(":")
+    additional_values = re.split(r"(?<!\\):", data["additionalValues"].iloc[0])
     output = {}
     for key, value in zip(additional_keys, additional_values):
         if key == "groupId":
@@ -27,7 +27,7 @@ def get_from_json(column: str, info: dict) -> Any:
 
 def get_value(result: pd.DataFrame, column: str, index: int = 0) -> Any:
     try:
-        value = result[column].iloc(index)
+        value = result[column].iloc[index]
         return value
     except KeyError:
         print(f"{column} not found in dataframe!")
