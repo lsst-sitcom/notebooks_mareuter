@@ -90,4 +90,5 @@ def check_take_image(keyword: str, values: dict, truth: dict, truth_key: str) ->
         truth_value = truth[truth_key]
         check(keyword, values, truth_value)
     except KeyError:
+        print(f"{truth_key} not found in additional values")
         check(keyword, values, None)
