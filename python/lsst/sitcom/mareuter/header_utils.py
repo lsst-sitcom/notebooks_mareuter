@@ -1,8 +1,9 @@
-__all__ = ["dict_from_additional", "get_from_json", "get_value"]
+__all__ = ["dict_from_additional", "get_from_json", "get_monitor_value", "get_value"]
 
 import re
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 
@@ -23,6 +24,25 @@ def get_from_json(column: str, info: dict) -> Any:
     index = series["columns"].index(column)
     result = series["values"][0][index]
     return result
+
+
+def get_monitor_value(
+    last_data: pd.DataFrame, range_data: pd.DataFrame, column: str, operation: str
+) -> Any:
+    try:
+        range_values = range_data[column].to_numpy()
+    except KeyError:
+        range_values = np.array([])
+
+    try:
+        last_value = last_data[column].to_numpy()
+    except KeyError:
+        print(f"{column} not found in dataframe!")
+        return None
+
+    values = np.hstack((last_value, range_values))
+    op = getattr(np, operation)
+    return op(values)
 
 
 def get_value(result: pd.DataFrame, column: str, index: int = 0) -> Any:

@@ -40,3 +40,10 @@ class TestHeaderUtils(unittest.TestCase):
         data_df = pd.DataFrame({"mode": [0, 1]})
         self.assertEqual(hu.get_value(data_df, "mode"), data_df["mode"][0])
         self.assertEqual(hu.get_value(data_df, "mode", 1), data_df["mode"][1])
+
+    def test_get_monitor_value(self) -> None:
+        empty_df = pd.DataFrame()
+        last_df = pd.DataFrame({"mon": [0]})
+        range_df = pd.DataFrame({"mon": [2]})
+        self.assertEqual(hu.get_monitor_value(last_df, empty_df, "mon", "max"), 0)
+        self.assertEqual(hu.get_monitor_value(last_df, range_df, "mon", "max"), 2)
