@@ -8,6 +8,6 @@ BTS_PLAYLISTS = {
     "dark": Playlist("MC", 20241130, [142, 144] * 5, "C", "calibration"),
     "flat": Playlist("MC", 20241130, [311, 312] * 5, "C", "calibration"),
     "aos-lsstcam-playlist-triplet": Playlist(
-        "IM", 20280818, list(range(960, 962 + 1)), "P", "aos"
+        "IM", 20280818, [962, 960, 961], "P", "aos"
     ),
 }
