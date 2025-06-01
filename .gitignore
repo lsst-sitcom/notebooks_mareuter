@@ -133,3 +133,6 @@ DSM_Report*.ipynb
 
 .DS_Store
 
+*.png
+*.jpg
+

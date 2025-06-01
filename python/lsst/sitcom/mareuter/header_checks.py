@@ -1,4 +1,11 @@
-__all__ = ["check_float", "check", "check_near", "check_not_empty", "check_take_image"]
+__all__ = [
+    "check_enum",
+    "check_float",
+    "check",
+    "check_near",
+    "check_not_empty",
+    "check_take_image",
+]
 
 from typing import Any, Callable, Union
 
@@ -26,6 +33,20 @@ def check(
         print(f"{keyword} OK")
     else:
         print(f"Problem with {keyword}: {truth} != {value}")
+
+
+@has_key
+def check_enum(keyword: str, values: dict, cenum: Any, truth: int) -> None:
+    try:
+        etruth = cenum(truth).name
+    except ValueError:
+        etruth = None
+        print(f"Invalid value for {keyword} provided: {truth}")
+    value = values[keyword]
+    if etruth == value:
+        print(f"{keyword} OK")
+    else:
+        print(f"Problem with {keyword}: {etruth} != {value}")
 
 
 @has_key
@@ -69,4 +90,5 @@ def check_take_image(keyword: str, values: dict, truth: dict, truth_key: str) ->
         truth_value = truth[truth_key]
         check(keyword, values, truth_value)
     except KeyError:
+        print(f"{truth_key} not found in additional values")
         check(keyword, values, None)
