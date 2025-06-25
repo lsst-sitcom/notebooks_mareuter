@@ -2,6 +2,7 @@
 name = "notebooks_mareuter"
 version = "1.0.0"
 dependencies = [
+    "astropy",
     "awscli",
     "fastparquet",
     "jupyter",
