@@ -28,6 +28,8 @@ def main(opts: argparse.Namespace) -> None:
         "ls",
         f"{info.bucket}/",
     ]
+    if opts.dir is not None:
+        cmd[-1] += opts.dir
 
     key_lines = run_cmd(cmd, as_lines=True)
     keys: list[str] = []
@@ -96,6 +98,8 @@ if __name__ == "__main__":
         type=str,
         help="Look at a particular butler bucket instead of the LFA.",
     )
+
+    parser.add_argument("-d", "--dir", type=str, help="Add sub-dir for bucket.")
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Increase script verbosity."
