@@ -30,6 +30,9 @@ def main(opts: argparse.Namespace) -> None:
     ]
     if opts.dir is not None:
         cmd[-1] += opts.dir
+        insertion = opts.dir
+    else:
+        insertion = ""
 
     key_lines = run_cmd(cmd, as_lines=True)
     keys: list[str] = []
@@ -48,7 +51,7 @@ def main(opts: argparse.Namespace) -> None:
 
     du_info = []
     for key in keys:
-        cmd[6] = f"{info.bucket}/{key}"
+        cmd[6] = f"{info.bucket}/{insertion}{key}"
         output = run_cmd(cmd, as_lines=True)
         name = key.strip("/")
         num_objects = int(output[-3].strip().split()[-1])
