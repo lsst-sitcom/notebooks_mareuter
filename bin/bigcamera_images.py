@@ -2,6 +2,7 @@
 import argparse
 import collections
 import operator
+import os
 
 from prettytable import PrettyTable, TableStyle
 import requests
@@ -97,14 +98,18 @@ def main(opts: argparse.Namespace) -> None:
 
     table = PrettyTable()
     table.field_names = HEADER
-
+    chunk_size = opts.chunk_size
     for obs_id, values in detector_lists.items():
+        chunks = [
+            ",".join(list(values["diff"])[i : i + chunk_size])
+            for i in range(0, len(values["diff"]), chunk_size)
+        ]
         table.add_row(
             [
                 obs_id,
                 len(exposures[values["exposure"]]),
                 len(values["sensors"]),
-                ",".join(values["diff"]),
+                os.linesep.join(chunks),
             ]
         )
 
@@ -124,6 +129,13 @@ if __name__ == "__main__":
     parser.add_argument("seq_end")
 
     parser.add_argument("-e", "--embargo", action="store_true")
+    parser.add_argument(
+        "-n",
+        "--chunk-size",
+        default=10,
+        type=int,
+        help="Set the chunk size for missing detector list.",
+    )
 
     args = parser.parse_args()
     main(args)
